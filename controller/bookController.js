@@ -1,3 +1,5 @@
+const BookModel = require('../model/bookModel');
+
 exports.createBook = async (req, res) => {
   try {
     const { name, description, category } = req.body;
@@ -37,8 +39,8 @@ exports.createBook = async (req, res) => {
   }
 };
 
-//Get on by name
-exports.getBookByName = async (req, res) => {
+//Get by name
+exports.getOneByName = async (req, res) => {
   try {
     const { name } = req.body;
     if (!name) {
@@ -46,10 +48,10 @@ exports.getBookByName = async (req, res) => {
         message: 'Please enter a book name',
       });
     }
-    const users = await BookModel.findOne({ name });
+    const books = await BookModel.findOne({ name });
     return res.status(200).json({
       message: 'Book found',
-      data: book,
+      data: books,
     });
   } catch (error) {
     return res.status(400).json({
@@ -64,7 +66,7 @@ exports.updateBook = async (req, res) => {
   try {
     const { id } = req.params;
     const { category, name } = req.body;
-    const update = await userModel.findByIdAndUpdate(
+    const update = await BookModel.findByIdAndUpdate(
       id,
       { category, name },
       { new: true }
@@ -85,7 +87,7 @@ exports.updateBook = async (req, res) => {
 //delete method
 exports.deleteBook = async (req, res) => {
   try {
-    const removeBook = await userModel.findByIdAndDelete(req.params.id);
+    const removeBook = await BookModel.findByIdAndDelete(req.params.id);
     return res.status(200).json({
       message: 'book deleted',
       data: removeBook,
