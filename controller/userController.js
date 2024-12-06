@@ -80,7 +80,7 @@
 //     });
 //   }
 // };
-const userModel = require('../model/userModel');
+// const userModel = require('../model/userModel');
 const UserModel = require('../model/userModel');
 
 //user sign up
@@ -155,7 +155,9 @@ exports.getOneById = async (req, res) => {
   try {
     // const {id} = req.params
     // const users = await UserModel.findById({id})
-    const users = await UserModel.findById(req.params.id);
+    const users = await UserModel.findById(req.params.id).populate({
+      path: 'Products',
+    });
     return res.status(200).json({
       message: 'gotten the user',
       data: users,
@@ -193,7 +195,7 @@ exports.updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const { password, name } = req.body;
-    const update = await userModel.findByIdAndUpdate(
+    const update = await UserModel.findByIdAndUpdate(
       id,
       { password, name },
       { new: true }
@@ -214,7 +216,7 @@ exports.updateUser = async (req, res) => {
 //delete method
 exports.deleteUser = async (req, res) => {
   try {
-    const removeUser = await userModel.findByIdAndDelete(req.params.id);
+    const removeUser = await UserModel.findByIdAndDelete(req.params.id);
     return res.status(200).json({
       message: 'user deleted',
       data: removeUser,

@@ -15,7 +15,7 @@ const userController = require('../controller/userController');
 const express = require('express');
 
 const userRoutes = express.Router();
-
+// 6752cb03e013de95e70fa6ae
 // userRoutes.post("/new-user" , userController.createUser)
 userRoutes.post('/new-user', userController.createUser);
 userRoutes.get('/get-all-users', userController.getAllUsers);
