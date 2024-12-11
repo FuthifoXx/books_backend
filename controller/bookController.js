@@ -1,7 +1,9 @@
 const BookModel = require('../model/bookModel');
+const userModel = require('../model/userModel');
 
 exports.createBook = async (req, res) => {
   try {
+    const getUser = await userModel.findById(req.params.userID);
     const { name, description, category } = req.body;
 
     if (!name && !description && !category) {
@@ -30,6 +32,9 @@ exports.createBook = async (req, res) => {
       description,
       category,
     });
+    //referencing a user to a book
+    await getUser.Books.push(newBook._id);
+    await getUser.save();
     return res.status(201).json({
       message: 'Book created',
       data: newBook,
@@ -56,6 +61,24 @@ exports.getOneByName = async (req, res) => {
   } catch (error) {
     return res.status(400).json({
       message: "couldn't find your book",
+      error,
+    });
+  }
+};
+
+// /get-one-book/:id
+exports.getOneById = async (req, res) => {
+  try {
+    const book = await BookModel.findById(req.params.id).populate({
+      path: 'Books',
+    });
+    return res.status(200).json({
+      message: 'Cart item',
+      data: book,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: 'Cart item not found',
       error,
     });
   }
